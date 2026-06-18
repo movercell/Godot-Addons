@@ -18,9 +18,9 @@ public partial class BuildOnChangeOnly : EditorPlugin
             Filter = "*.cs",
             IncludeSubdirectories = true
         };
-        fileSystemWatcher.Changed += FileChangedHelper;
-        fileSystemWatcher.Created += FileChangedHelper;
-        fileSystemWatcher.Deleted += FileChangedHelper;
+        fileSystemWatcher.Changed += FileChanged;
+        fileSystemWatcher.Created += FileChanged;
+        fileSystemWatcher.Deleted += FileChanged;
         fileSystemWatcher.Error += (s, e) => GD.Print(e.GetException().Message);
         fileSystemWatcher.EnableRaisingEvents = true;
 
@@ -31,22 +31,19 @@ public partial class BuildOnChangeOnly : EditorPlugin
         EditorInterface.Singleton.GetBaseControl().GetWindow().FocusEntered -= Focus;
 
         fileSystemWatcher.EnableRaisingEvents = false;
-        fileSystemWatcher.Changed -= FileChangedHelper;
-        fileSystemWatcher.Created -= FileChangedHelper;
-        fileSystemWatcher.Deleted -= FileChangedHelper;
+        fileSystemWatcher.Changed -= FileChanged;
+        fileSystemWatcher.Created -= FileChanged;
+        fileSystemWatcher.Deleted -= FileChanged;
         fileSystemWatcher.Dispose();
 
         monoPlugin.Set("SkipBuildBeforePlaying", false);
         GD.Print("Stopping the BuildOnChangeOnly plugin.");
     }
-    private void FileChangedHelper(object Sender, FileSystemEventArgs e) {
+    private void FileChanged(object Sender, FileSystemEventArgs e) {
         if (!hasChanged) {
             GD.Print("C# file changed, rebuild queued.");
             hasChanged = true;
         }
-    }
-    private void FileChanged() {
-        hasChanged = true;
     }
     private void Focus() {
         if (hasChanged) {
