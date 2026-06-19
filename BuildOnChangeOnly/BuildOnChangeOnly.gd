@@ -12,9 +12,8 @@ func _enter_tree():
 		if plugin.has_method("BuildProjectPressed"):
 			mono_plugin = plugin
 			break
-	# Press the "Build Project (Alt + B)" button.(or well, call the method that pressing it calls) so that
-	# the plugin will work when first enabled and also rebuild when the editor gets opened
-	# in case of files being modified while the editor is not open
+	# Press the "Build Project (Alt + B)" button.(or well, call the method that pressing it calls)
+	# for the case of files being modified while the editor is not open
 	mono_plugin.BuildProjectPressed()
 	
 	var script = load("res://addons/BuildOnChangeOnly/BuildOnChangeOnly.cs")
